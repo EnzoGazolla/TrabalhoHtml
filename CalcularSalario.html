@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculo de Salário Líquido</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6fea66 0%, #02340d 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #2fc739;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #91d680 0%, #22c67f 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .resultado {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .resultado.show {
+            display: block;
+        }
+
+        .resultado h2 {
+            color: #37a52e;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .info {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .classificacao {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .baixo { background: #ffc107; color: #000; }
+        .medio { background: #28a745; color: white; }
+        .alto { background: #007bff; color: white; }
+        .insatisfatorio { background: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+    <!-- 
+    CEUB - Ciência da Computação
+    Programação para Web
+    Prof. Valdemir S Silva
+    Aluno: Enzo Gazolla Nagano
+    Exercício 1 - Cálculo de Salário Líquido
+    -->
+
+    <div class="container">
+        <h1> Cálculo de Salário Líquido</h1>
+        
+        <form id="formSalario">
+            <div class="form-group">
+                <label for="js_qht">Horas Trabalhadas no Mês (135 a 180):</label>
+                <input type="number" id="js_qht" min="135" max="180" required>
+            </div>
+
+            <div class="form-group">
+                <label for="js_vht">Valor da Hora (R$ 25 a 70):</label>
+                <input type="number" id="js_vht" min="25" max="70" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <label for="js_inss">Desconto INSS (% 5 a 15):</label>
+                <input type="number" id="js_inss" min="5" max="15" step="0.1" required>
+            </div>
+
+            <button type="submit">Calcular Salário</button>
+        </form>
+
+        <div class="resultado" id="resultado">
+            <h2> Resultado do Cálculo</h2>
+            <div class="info">
+                <span>Salário Bruto:</span>
+                <span id="salarioBruto">R$ 0,00</span>
+            </div>
+            <div class="info">
+                <span>Desconto INSS:</span>
+                <span id="descontoINSS">R$ 0,00</span>
+            </div>
+            <div class="info">
+                <span><strong>Salário Líquido:</strong></span>
+                <span id="salarioLiquido"><strong>R$ 0,00</strong></span>
+            </div>
+            <div class="classificacao" id="classificacao"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('formSalario').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const js_qht = parseFloat(document.getElementById('js_qht').value);
+            const js_vht = parseFloat(document.getElementById('js_vht').value);
+            const js_inss = parseFloat(document.getElementById('js_inss').value);
+            
+            const salarioBruto = js_qht * js_vht;
+            const valorDesconto = salarioBruto * (js_inss / 100);
+            const salarioLiquido = salarioBruto - valorDesconto;
+            
+            let classificacao = '';
+            let classeCSS = '';
+            
+            if (salarioLiquido < 3000) {
+                classificacao = 'INSATISFATÓRIO';
+                classeCSS = 'insatisfatorio';
+            } else if (salarioLiquido >= 3000 && salarioLiquido < 5000) {
+                classificacao = 'BAIXO';
+                classeCSS = 'baixo';
+            } else if (salarioLiquido >= 5000 && salarioLiquido < 8000) {
+                classificacao = 'MÉDIO';
+                classeCSS = 'medio';
+            } else {
+                classificacao = 'ALTO';
+                classeCSS = 'alto';
+            }
+            
+            document.getElementById('salarioBruto').textContent = 
+                salarioBruto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            document.getElementById('descontoINSS').textContent = 
+                valorDesconto.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            document.getElementById('salarioLiquido').textContent = 
+                salarioLiquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            
+            const divClassificacao = document.getElementById('classificacao');
+            divClassificacao.textContent = `Classificação Salarial: ${classificacao}`;
+            divClassificacao.className = `classificacao ${classeCSS}`;
+            
+            document.getElementById('resultado').classList.add('show');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Notas - IF/ELSE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #1e3c72;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 26px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .metodo {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1e3c72;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        .resultado {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        .resultado.show {
+            display: block;
+        }
+
+        .resultado h2 {
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .info {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .aprovado {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+
+        .recuperacao {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+        }
+
+        .reprovado {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- 
+    CEUB - Ciência da Computação
+    Programação para Web
+    Prof. Valdemir S Silva
+    Aluno: Enzo Gazolla Nagano
+    Exercício 2.1 - Sistema de Notas (IF/ELSE)
+    -->
+
+    <div class="container">
+        <h1> Sistema de Avaliação</h1>
+        <p class="metodo">Método IF/ELSE </p>
+        
+        <form id="formNotas">
+            <div class="form-group">
+                <label for="nome">Nome do Aluno:</label>
+                <input type="text" id="nome" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nota1">Nota 1 (0 a 100):</label>
+                <input type="number" id="nota1" min="0" max="100" step="0.1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nota2">Nota 2 (0 a 100):</label>
+                <input type="number" id="nota2" min="0" max="100" step="0.1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nota3">Nota 3 (0 a 100):</label>
+                <input type="number" id="nota3" min="0" max="100" step="0.1" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nota4">Nota 4 (0 a 100):</label>
+                <input type="number" id="nota4" min="0" max="100" step="0.1" required>
+            </div>
+
+            <button type="submit">Calcular Média</button>
+        </form>
+
+        <div class="resultado" id="resultado">
+            <h2 id="nomeAluno"></h2>
+            <div class="info">Soma: <strong id="soma"></strong></div>
+            <div class="info">Média: <strong id="media"></strong></div>
+            <div class="info" style="font-size: 24px; margin-top: 20px;">
+                <strong id="situacao"></strong>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('formNotas').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nome = document.getElementById('nome').value;
+            const nota1 = parseFloat(document.getElementById('nota1').value);
+            const nota2 = parseFloat(document.getElementById('nota2').value);
+            const nota3 = parseFloat(document.getElementById('nota3').value);
+            const nota4 = parseFloat(document.getElementById('nota4').value);
+            
+            const soma = nota1 + nota2 + nota3 + nota4;
+            const media = soma / 4;
+            
+            let situacao = '';
+            let classeCSS = '';
+            
+            // IF/ELSE Aninhados
+            if (media > 70) {
+                situacao = ' APROVADO';
+                classeCSS = 'aprovado';
+            } else {
+                if (media >= 50) {
+                    situacao = ' RECUPERAÇÃO';
+                    classeCSS = 'recuperacao';
+                } else {
+                    situacao = ' REPROVADO';
+                    classeCSS = 'reprovado';
+                }
+            }
+            
+            document.getElementById('nomeAluno').textContent = nome;
+            document.getElementById('soma').textContent = soma.toFixed(2);
+            document.getElementById('media').textContent = media.toFixed(2);
+            document.getElementById('situacao').textContent = situacao;
+            
+            const divResultado = document.getElementById('resultado');
+            divResultado.className = `resultado show ${classeCSS}`;
+        });
+    </script>
+</body>
+</html>

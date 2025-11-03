@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Cadastro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #022ab0 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .instrucoes {
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #999;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+
+        .radio-group,
+        .checkbox-group {
+            margin-top: 10px;
+        }
+
+        .radio-group label,
+        .checkbox-group label {
+            display: block;
+            font-weight: normal;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .radio-group input,
+        .checkbox-group input {
+            margin-right: 8px;
+            cursor: pointer;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .error {
+            border-color: #dc3545 !important;
+            background-color: #fff5f5;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .buttons {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 12px 30px;
+            border: 1px solid #999;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit {
+            background: white;
+            color: #333;
+        }
+
+        .btn-submit:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .btn-reset {
+            background: white;
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background: #6c757d;
+            color: white;
+            border-color: #6c757d;
+        }
+
+        .resultado {
+            margin-top: 30px;
+            padding: 25px;
+            background: #e8f5e9;
+            border-radius: 8px;
+            border: 2px solid #4caf50;
+            display: none;
+        }
+
+        .resultado.show {
+            display: block;
+        }
+
+        .resultado h3 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+        }
+
+        .resultado-item {
+            padding: 10px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .resultado-item strong {
+            color: #2e7d32;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+    CEUB - Ciência da Computação
+    Programação para Web
+    Prof. Valdemir S Silva
+    Aluno: Enzo Gazolla Nagano
+    Exercício 3 - Formulário com Validação
+    -->
+
+    <div class="container">
+        <h2 id="nomeTitulo"></h2>
+        <p class="instrucoes">
+            Por favor, preencha os campos abaixo e depois clique no botão Enviar. 
+            Caso necessite apagar os dados, dê um clique no botão Limpar. Muito Obrigado!
+        </p>
+
+        <form id="formCadastro" novalidate>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nome">Nome Completo:</label>
+                    <input type="text" id="nome" required>
+                    <span class="error-message" id="erroNome">Por favor, informe seu nome completo</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Seu e-mail:</label>
+                    <input type="email" id="email" required>
+                    <span class="error-message" id="erroEmail">Por favor, informe um e-mail válido</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Sexo:</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="sexo" value="Feminino" required>
+                        Feminino
+                    </label>
+                    <label>
+                        <input type="radio" name="sexo" value="Masculino">
+                        Masculino
+                    </label>
+                </div>
+                <span class="error-message" id="erroSexo">Por favor, selecione uma opção</span>
+            </div>
+
+            <div class="form-group">
+                <label>Estado Civil:</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="estadoCivil" value="Solteiro" required>
+                        Solteiro
+                    </label>
+                    <label>
+                        <input type="radio" name="estadoCivil" value="Casado">
+                        Casado
+                    </label>
+                    <label>
+                        <input type="radio" name="estadoCivil" value="Enrolado">
+                        Enrolado
+                    </label>
+                </div>
+                <span class="error-message" id="erroEstadoCivil">Por favor, selecione uma opção</span>
+            </div>
+
+            <div class="form-group">
+                <label>Bens que possui:</label>
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" name="bens" value="Casa">
+                        Casa
+                    </label>
+                    <label>
+                        <input type="checkbox" name="bens" value="Automovel">
+                        Automóvel
+                    </label>
+                    <label>
+                        <input type="checkbox" name="bens" value="Moto">
+                        Moto
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="faixaIdade">Faixa de idade:</label>
+                    <select id="faixaIdade" required>
+                        <option value="">Selecione...</option>
+                        <option value="3 a 10 anos">3 a 10 anos</option>
+                        <option value="11 a 20 anos">11 a 20 anos</option>
+                        <option value="21 a 30 anos">21 a 30 anos</option>
+                        <option value="31 a 40 anos">31 a 40 anos</option>
+                        <option value="41 a 50 anos">41 a 50 anos</option>
+                        <option value="Acima de 50 anos">Acima de 50 anos</option>
+                    </select>
+                    <span class="error-message" id="erroFaixaIdade">Por favor, selecione a faixa de idade</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="hobby">Hobby preferido:</label>
+                    <select id="hobby">
+                        <option value="">Selecione...</option>
+                        <option value="Ler livros">Ler livros</option>
+                        <option value="Esportes">Esportes</option>
+                        <option value="Música">Música</option>
+                        <option value="Cinema">Cinema</option>
+                        <option value="Viagens">Viagens</option>
+                        <option value="Jogos">Jogos</option>
+                        <option value="Cozinhar">Cozinhar</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="observacoes">Observações Gerais:</label>
+                <textarea id="observacoes"></textarea>
+            </div>
+
+            <div class="buttons">
+                <button type="submit" class="btn-submit">Enviar os dados</button>
+                <button type="reset" class="btn-reset">Limpar os dados</button>
+            </div>
+        </form>
+
+        <div class="resultado" id="resultado">
+            <h3> Dados enviados com sucesso!</h3>
+            <div id="dadosResultado"></div>
+        </div>
+    </div>
+
+    <script>
+        // Solicitar nome ao carregar a página
+        window.onload = function() {
+            let nomeUsuario = '';
+            
+            while (!nomeUsuario || nomeUsuario.trim().length < 3) {
+                nomeUsuario = prompt('Olá! Por favor, informe seu nome completo:');
+                
+                if (nomeUsuario === null) {
+                    // Usuário cancelou
+                    nomeUsuario = '';
+                    break;
+                }
+                
+                if (nomeUsuario.trim().length < 3) {
+                    alert('Por favor, informe um nome válido com pelo menos 3 caracteres.');
+                }
+            }
+            
+            // Preencher o campo nome
+            if (nomeUsuario) {
+                document.getElementById('nomeTitulo').textContent = 'Olá, ' + nomeUsuario + ' !';
+                document.getElementById('nome').value = nomeUsuario;
+                document.getElementById('nome').classList.add('success');
+            }
+        };
+
+        const form = document.getElementById('formCadastro');
+
+        function validarNome() {
+            const nome = document.getElementById('nome');
+            const erro = document.getElementById('erroNome');
+            
+            if (nome.value.trim().length < 3) {
+                nome.classList.add('error');
+                erro.classList.add('show');
+                return false;
+            } else {
+                nome.classList.remove('error');
+                erro.classList.remove('show');
+                return true;
+            }
+        }
+
+        function validarEmail() {
+            const email = document.getElementById('email');
+            const erro = document.getElementById('erroEmail');
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            
+            if (!regex.test(email.value)) {
+                email.classList.add('error');
+                erro.classList.add('show');
+                return false;
+            } else {
+                email.classList.remove('error');
+                erro.classList.remove('show');
+                return true;
+            }
+        }
+
+        function validarRadio(name, erroId) {
+            const selecionado = document.querySelector(`input[name="${name}"]:checked`);
+            const erro = document.getElementById(erroId);
+            
+            if (!selecionado) {
+                erro.classList.add('show');
+                return false;
+            } else {
+                erro.classList.remove('show');
+                return true;
+            }
+        }
+
+        function validarFaixaIdade() {
+            const faixa = document.getElementById('faixaIdade');
+            const erro = document.getElementById('erroFaixaIdade');
+            
+            if (faixa.value === '') {
+                faixa.classList.add('error');
+                erro.classList.add('show');
+                return false;
+            } else {
+                faixa.classList.remove('error');
+                erro.classList.remove('show');
+                return true;
+            }
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const validNome = validarNome();
+            const validEmail = validarEmail();
+            const validSexo = validarRadio('sexo', 'erroSexo');
+            const validEstadoCivil = validarRadio('estadoCivil', 'erroEstadoCivil');
+            const validFaixaIdade = validarFaixaIdade();
+            
+            if (!validNome || !validEmail || !validSexo || !validEstadoCivil || !validFaixaIdade) {
+                alert('Por favor, corrija os erros no formulário!');
+                return;
+            }
+            
+            // Coletar dados
+            const bens = Array.from(document.querySelectorAll('input[name="bens"]:checked'))
+                .map(cb => cb.value);
+            
+            const dados = {
+                'Nome Completo': document.getElementById('nome').value,
+                'E-mail': document.getElementById('email').value,
+                'Sexo': document.querySelector('input[name="sexo"]:checked').value,
+                'Estado Civil': document.querySelector('input[name="estadoCivil"]:checked').value,
+                'Bens que possui': bens.length > 0 ? bens.join(', ') : 'Nenhum',
+                'Faixa de idade': document.getElementById('faixaIdade').value,
+                'Hobby preferido': document.getElementById('hobby').value || 'Não informado',
+                'Observações Gerais': document.getElementById('observacoes').value || 'Nenhuma'
+            };
+            
+            // Exibir resultado
+            let html = '';
+            for (let [chave, valor] of Object.entries(dados)) {
+                html += `
+                    <div class="resultado-item">
+                        <strong>${chave}:</strong> ${valor}
+                    </div>
+                `;
+            }
+            
+            document.getElementById('dadosResultado').innerHTML = html;
+            document.getElementById('resultado').classList.add('show');
+            document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        form.addEventListener('reset', function() {
+            document.getElementById('resultado').classList.remove('show');
+            document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+            document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+        });
+
+        // Validação em tempo real
+        document.getElementById('nome').addEventListener('blur', validarNome);
+        document.getElementById('email').addEventListener('blur', validarEmail);
+        document.getElementById('faixaIdade').addEventListener('change', validarFaixaIdade);
+    </script>
+</body>
+</html>
